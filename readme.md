@@ -1,17 +1,17 @@
-# Crear el entorno (usualmente llamado 'venv' o '.venv')
+### Crear el entorno (usualmente llamado 'venv' o '.venv')
 python -m venv [nombre-del-entorno]
 
-# Activarlo
-# En Windows:
+### Activarlo
+#### En Windows:
 venv\Scripts\activate
-# En Mac/Linux:
+#### En Mac/Linux:
 source venv/bin/activate
 
-# 🚀 Retail Real-Time Streaming Pipeline
+### Retail Real-Time Streaming Pipeline
 
 Este proyecto implementa un pipeline de datos en tiempo real diseñado para la ingesta, procesamiento y monitoreo de transacciones de retail. Utiliza una arquitectura moderna desacoplada basada en microservicios y contenedores.
 
-## 🏗️ Arquitectura del Sistema
+### Arquitectura del Sistema
 
 El flujo de datos se compone de tres capas principales:
 1. **Ingesta (Producer):** Un simulador de ventas en Python que genera eventos JSON y los envía a un broker de mensajería.
@@ -20,7 +20,7 @@ El flujo de datos se compone de tres capas principales:
 
 
 
-## 🛠️ Tecnologías Utilizadas
+### Tecnologías Utilizadas
 
 * **Lenguaje:** Python 3.x
 * **Infraestructura:** Docker & Docker Compose
@@ -28,7 +28,7 @@ El flujo de datos se compone de tres capas principales:
 * **Tracking/MLOps:** MLflow
 * **Librerías:** `kafka-python-ng`, `pandas`, `mlflow`
 
-## 🚀 Ejecución del Proyecto
+### Ejecución del Proyecto
 
 ### 1. Levantar la Infraestructura
 Asegúrate de tener Docker instalado y ejecuta:
@@ -53,8 +53,8 @@ Accede a la interfaz de MLflow en http://localhost:5000 para ver las métricas d
 
 ### Características Destacadas
 
-- Desacoplamiento: El sistema es resiliente a caídas de los consumidores gracias al buffering de Kafka.
+- Desacoplamiento: El sistema es resistente a caídas de los consumidores gracias al buffering de Kafka.
 
-- Transformación en Vuelo: Limpieza de datos y cálculo de totales antes del almacenamiento.
+- Limpieza de datos y cálculo de totales antes del almacenamiento.
 
-- Gobernanza: Registro sistemático de cada transacción para auditoría y análisis posterior.
+- Registro sistemático de cada transacción para auditoría y análisis posterior
