@@ -1,0 +1,19 @@
+# Entorno virtual
+retail-stream-env/
+venv/
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Docker
+.docker/
+data/
+
+# MLflow
+mlruns/
+mlflow.db
+
+# VS Code
+.vscode/
