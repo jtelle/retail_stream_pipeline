@@ -9,7 +9,8 @@ import sqlite3
 
 
 def init_db():
-    conn = sqlite3.connect('retail_history.db')
+    # Añadimos timeout=30 para que espere hasta 30 segundos si la DB está ocupada
+    conn = sqlite3.connect('retail_history.db', timeout=30)
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS ventas (
@@ -35,6 +36,7 @@ consumer = KafkaConsumer(
 
 mlflow.set_tracking_uri("http://localhost:5000")
 mlflow.set_experiment("Retail_Streaming_Analysis")
+contador_batch = 0
 print("👂 Escuchando ventas en tiempo real...")
 
 for mensaje in consumer:

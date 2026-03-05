@@ -76,3 +76,14 @@ Abrir http://localhost:5000 en el navegador para ver el panel de control de mét
 - Modelos ML: Sustitución de la lógica heurística por modelos predictivos avanzados (Prophet/XGBoost) servidos desde MLflow.
 
 - Visualización: Integración con Grafana para dashboards de negocio e infraestructura en tiempo real.
+
+
+#### Orden de parada recomendado:
+
+##### Terminal del **Producer**: Ctrl + C. (Detenemos el grifo de datos primero).
+
+##### Terminal del **Consumer**: Ctrl + C. (Dejamos que procese los últimos mensajes y cierre la conexión).
+
+##### Terminal de MLflow / Docker: 
+
+- docker-compose down

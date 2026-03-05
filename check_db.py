@@ -3,7 +3,8 @@ import pandas as pd
 
 
 def consultar_ventas():
-    conn = sqlite3.connect('retail_history.db')
+    # Espera hasta 20 segundos si está bloqueada
+    conn = sqlite3.connect('retail_history.db', timeout=20)
     # Usamos Pandas para que la tabla se vea bonita en la consola
     df = pd.read_sql_query(
         "SELECT * FROM ventas ORDER BY fecha DESC LIMIT 5", conn)

@@ -17,3 +17,8 @@ mlflow.db
 
 # VS Code
 .vscode/
+
+# Bases de datos SQLite
+*.db
+*.sqlite
+*.sqlite3
