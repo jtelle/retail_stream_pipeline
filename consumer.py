@@ -3,6 +3,29 @@ import mlflow.pyfunc
 from kafka import KafkaConsumer
 import json
 
+import sqlite3
+
+# Configuración de SQL local
+
+
+def init_db():
+    conn = sqlite3.connect('retail_history.db')
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS ventas (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            producto TEXT,
+            cantidad INTEGER,
+            total REAL,
+            fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+    conn.commit()
+    return conn
+
+
+db_conn = init_db()
+
 consumer = KafkaConsumer(
     'retail_topic',
     bootstrap_servers=['localhost:9092'],
@@ -20,12 +43,36 @@ for mensaje in consumer:
     producto = venta['producto'].upper()
     total = venta['cantidad'] * venta['precio']
 
-    print(f"🛒 PROCESANDO: {producto} | Total: {total}€")
+    print(f"PROCESANDO: {producto} | Total: {total}€")
 
-    # --- AQUÍ ENVIAMOS A MLFLOW ---
-    with mlflow.start_run():
+    # 1. Preparar la inserción (Sin commit aún)
+    cursor = db_conn.cursor()
+    cursor.execute("INSERT INTO ventas (producto, cantidad, total) VALUES (?, ?, ?)",
+                   (producto, venta['cantidad'], total))
+
+    contador_batch += 1  # Aumentamos el contador
+
+    # 2. PoC de Previsión de Demanda (Lógica de Negocio)
+    demanda_predicha = None
+    if producto == 'LECHE':  # O YOGUR, según tu lista
+        # Simulamos que el modelo ML predice que mañana venderás un 10% más
+        demanda_predicha = venta['cantidad'] * 1.10
+        print(
+            f"PREVISIÓN: Mañana se esperan {demanda_predicha:.2f} unidades de {producto}")
+
+    # 3. Registro en MLflow
+    with mlflow.start_run(nested=True):
         mlflow.log_param("producto", producto)
         mlflow.log_metric("venta_total", total)
-        mlflow.log_metric("cantidad", venta['cantidad'])
+        if demanda_predicha:
+            mlflow.log_metric("demanda_futura_estimada", demanda_predicha)
 
-    # 1. Guardar en un archivo Parquet.
+    print(f"PROCESADO Y GUARDADO EN SQL: {producto} | Total: {total}€")
+
+    # 4. Commit solo cada 30 mensajes
+    if contador_batch >= 30:
+        db_conn.commit()
+        print(f"BATCH COMPLETADO: 30 registros guardados en SQL.")
+        contador_batch = 0  # Reiniciamos el contador
+    else:
+        print(f"Mensaje en buffer ({contador_batch}/30): {producto}")
