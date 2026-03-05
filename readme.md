@@ -58,3 +58,14 @@ Accede a la interfaz de MLflow en http://localhost:5000 para ver las métricas d
 - Limpieza de datos y cálculo de totales antes del almacenamiento.
 
 - Registro sistemático de cada transacción para auditoría y análisis posterior
+
+## 🌟 PoC Highlights: SQL & Predictive Analytics
+Esta PoC simula un entorno de producción real:
+* **Persistencia SQL:** Cada mensaje de Kafka se inserta en una base de datos SQLite (`retail_history.db`) para análisis histórico.
+* **Previsión de Demanda:** Implementa una lógica de inferencia que calcula la demanda futura estimada, registrando las predicciones en MLflow para monitorear el rendimiento del modelo.
+
+Future Roadmap
+1. **Cloud Integration:** Migrate the SQLite sink to a managed PostgreSQL instance (RDS/Cloud SQL).
+2. **Advanced ML:** Replace the heuristic forecasting with a trained Prophet or XGBoost model served via MLflow Models.
+3. **Dashboarding:** Connect Grafana or Power BI to the SQL database for real-time business intelligence.
+4. **Containerization:** Orchestrate the entire pipeline using Kubernetes (K8s) for high availability.
