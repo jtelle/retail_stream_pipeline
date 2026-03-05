@@ -51,9 +51,15 @@ A través de la interfaz de MLflow, es posible visualizar:
    ```
 2. **Ejecutar el Pipeline:**
 
-    - Iniciar el generador de datos: python producer.py
+    - Iniciar el generador de datos:
+   ```bash
+   python producer.py
+   ```
 
-    - Iniciar el procesador: python consumer.py
+    - Iniciar el procesador:
+   ```bash
+   python consumer.py
+   ```
 
 3. **Verificar Datos:**
 Ejecutar el script de auditoría SQL para ver los últimos registros guardados:
