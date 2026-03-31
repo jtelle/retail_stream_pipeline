@@ -37,13 +37,12 @@ The pipeline includes a symbolic inference layer that detects key products (such
 3. Real‑Time Monitoring
 Through the MLflow interface, it is possible to visualize:
 
-The total value of each processed sale.
+- The total value of each processed sale.
 
-The historical record of demand predictions.
+- The historical record of demand predictions.
 
-Parameters of the products flowing through the pipeline.## Retail Streaming Pipeline PoC
+- Parameters of the products flowing through the pipeline.
 
-Este proyecto es una Prueba de Concepto (PoC) de un pipeline de datos de retail en tiempo real. Utiliza una arquitectura desacoplada para la ingesta, procesamiento, persistencia y monitorización de transacciones de ventas.
 
 ### System Architecture
 The data flow follows the structure below:
@@ -121,12 +120,12 @@ Open http://localhost:5000 in your browser to view the metrics and experiment da
 - Visualization: Integrate Grafana for real‑time business and infrastructure dashboards.
 
 ### Recommended Shutdown Order:
-Producer terminal: Ctrl + C.
-(Stop the data faucet first.)
+- Producer terminal: Ctrl + C.
+  (Stop the data faucet first.)
 
-Consumer terminal: Ctrl + C.
-(Allow it to process remaining messages and close the connection.)
+- Consumer terminal: Ctrl + C.
+  (Allow it to process remaining messages and close the connection.)
 
-MLflow / Docker terminal:
-- docker-compose down
+- MLflow / Docker terminal:
+  - docker-compose down
 
