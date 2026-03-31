@@ -97,7 +97,7 @@ Start the data generator:
 
 ```bash
 python producer.py
-``
+```
 Start the processor:
 
 ```bash
