@@ -22,3 +22,6 @@ mlflow.db
 *.db
 *.sqlite
 *.sqlite3
+
+#otros
+apuntes.md

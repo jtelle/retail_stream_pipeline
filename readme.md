@@ -1,89 +1,132 @@
-### Crear el entorno (usualmente llamado 'venv' o '.venv')
-python -m venv [nombre-del-entorno]
 
-### Activarlo
-#### En Windows:
-venv\Scripts\activate
-#### En Mac/Linux:
-source venv/bin/activate
 
 ## Retail Streaming Pipeline PoC
+This project is a Proof of Concept (PoC) for a real‑time retail data pipeline. It uses a decoupled architecture for ingestion, processing, persistence, and monitoring of sales transactions.
+
+### System Architecture
+The data flow follows the structure below:
+
+- Ingestion: A Producer simulates sales transactions and sends them to an Apache Kafka topic.
+
+- Streaming: A Python Consumer processes messages in real time.
+
+- SQL Persistence: Processed data is efficiently stored in a SQLite database using micro‑batching techniques.
+
+- Observability & MLflow: Business metrics and a demand‑forecasting logic are tracked through MLflow Tracking.
+
+### Technologies Used
+- Apache Kafka: Messaging broker for data streaming.
+
+- Python 3.x: Main language for Producer and Consumer logic.
+
+- SQLite: Relational database engine for historical persistence.
+
+- MLflow: Platform for ML lifecycle management and metric monitoring.
+
+- Docker & Docker Compose: Infrastructure service orchestration.
+
+- Pandas: Used for validation and visualization of structured data.
+
+### Key Features
+1. SQL Micro‑Batching
+To optimize I/O performance, the Consumer does not commit after every received message. Instead, it implements a buffer that groups 30 transactions before persisting them into the retail_history.db database. This ensures system scalability under higher data volumes.
+
+2. Demand Forecasting Logic
+The pipeline includes a symbolic inference layer that detects key products (such as MILK or YOGURT) and computes an estimate of future demand (based on a 10% increase). This metric is automatically logged in MLflow.
+
+3. Real‑Time Monitoring
+Through the MLflow interface, it is possible to visualize:
+
+The total value of each processed sale.
+
+The historical record of demand predictions.
+
+Parameters of the products flowing through the pipeline.## Retail Streaming Pipeline PoC
 
 Este proyecto es una Prueba de Concepto (PoC) de un pipeline de datos de retail en tiempo real. Utiliza una arquitectura desacoplada para la ingesta, procesamiento, persistencia y monitorización de transacciones de ventas.
 
-### Arquitectura del Sistema
+### System Architecture
+The data flow follows the structure below:
 
-El flujo de datos sigue el siguiente esquema:
+1. Ingestion: A Producer simulates sales transactions and sends them to an Apache Kafka topic.
 
-1. **Ingesta:** Un Producer simula transacciones de ventas y las envía a un tópico de Apache Kafka.
-2. **Streaming:** Un Consumer en Python procesa los mensajes en tiempo real.
-3. **Persistencia SQL:** Los datos procesados se almacenan de forma eficiente en una base de datos SQLite mediante técnicas de micro-batching.
-4. **Observabilidad & MLflow:** Se realiza un seguimiento de métricas de negocio y una lógica de previsión de demanda integrada con MLflow Tracking.
+2. Streaming: A Python Consumer processes the messages in real time.
 
-### Tecnologías Utilizadas
+3. SQL Persistence: The processed data is efficiently stored in a SQLite database using micro‑batching techniques.
 
-* **Apache Kafka:** Broker de mensajería para el streaming de datos.
-* **Python 3.x:** Lenguaje principal para la lógica del Producer y Consumer.
-* **SQLite:** Motor de base de datos relacional para la persistencia histórica.
-* **MLflow:** Plataforma para la gestión del ciclo de vida de ML y monitorización de métricas.
-* **Docker & Docker Compose:** Orquestación de los servicios de infraestructura.
-* **Pandas:** Utilizado para la validación y visualización de datos estructurados.
+4. Observability & MLflow: Business metrics and a demand‑forecasting logic are tracked through MLflow Tracking.
 
-### Características Principales
+### Technologies Used
+- Apache Kafka: Messaging broker for data streaming.
 
-#### 1. Micro-Batching en SQL
-Para optimizar el rendimiento de I/O, el Consumer no realiza un commit por cada mensaje recibido. En su lugar, implementa un buffer que agrupa **30 transacciones** antes de persistirlas en la base de datos `retail_history.db`. Esto asegura la escalabilidad del sistema ante mayores volúmenes de datos.
+- Python 3.x: Main language for the Producer and Consumer logic.
 
-#### 2. Lógica de Previsión de Demanda
-El pipeline incluye una capa de inferencia simbólica que detecta productos clave (como LECHE o YOGUR) y calcula una estimación de demanda futura (basada en un incremento del 10%). Esta métrica se registra automáticamente en MLflow.
+- SQLite: Relational database engine for historical persistence.
 
-#### 3. Monitorización en Tiempo Real
-A través de la interfaz de MLflow, es posible visualizar:
-* El valor total de cada venta procesada.
-* El histórico de predicciones de demanda.
-* Parámetros de los productos que fluyen por el pipeline.
+- MLflow: Platform for ML lifecycle management and metric monitoring.
 
-### Instrucciones de Uso
+- Docker & Docker Compose: Orchestration of infrastructure services.
 
-1. **Levantar Infraestructura:**
-   ```bash
-   docker-compose up -d
-   ```
-2. **Ejecutar el Pipeline:**
+- Pandas: Used for validation and visualization of structured data.
 
-    - Iniciar el generador de datos:
-   ```bash
-   python producer.py
-   ```
+### Key Features
+1. SQL Micro‑Batching
+To optimize I/O performance, the Consumer does not commit after every received message. Instead, it implements a buffer that groups 30 transactions before persisting them into the retail_history.db database. This ensures the system remains scalable under higher data volumes.
 
-    - Iniciar el procesador:
-   ```bash
-   python consumer.py
-   ```
+2. Demand Forecasting Logic
+The pipeline includes a symbolic inference layer that detects key products (such as MILK or YOGURT) and computes an estimate of future demand (based on a 10% increase). This metric is automatically logged in MLflow.
 
-3. **Verificar Datos:**
-Ejecutar el script de auditoría SQL para ver los últimos registros guardados:
+3. Real‑Time Monitoring
+    Through the MLflow interface, it is possible to visualize:
 
-    ```bash
-    python check_db.py
-    ```
-4. Acceder a MLflow:
-Abrir http://localhost:5000 en el navegador para ver el panel de control de métricas y experimentos.
+    The total value of each processed sale.
 
-### Roadmap / Futuras Mejoras
-- Escalabilidad: Migración de SQLite a PostgreSQL para soporte multi-usuario y entornos distribuidos.
+    The historical record of demand predictions.
 
-- Modelos ML: Sustitución de la lógica heurística por modelos predictivos avanzados (Prophet/XGBoost) servidos desde MLflow.
+    Parameters of the products flowing through the pipeline.
 
-- Visualización: Integración con Grafana para dashboards de negocio e infraestructura en tiempo real.
+### Usage Instructions
+1. Start the Infrastructure:
 
+```bash
+docker-compose up -d
+```
+Run the Pipeline:
 
-#### Orden de parada recomendado:
+Start the data generator:
 
-- ##### Terminal del **Producer**: Ctrl + C. (Detenemos el grifo de datos primero).
+```bash
+python producer.py
+``
+Start the processor:
 
-- ##### Terminal del **Consumer**: Ctrl + C. (Dejamos que procese los últimos mensajes y cierre la conexión).
+```bash
+python consumer.py
+```
+2. Verify Data:  
+ - Run the SQL audit script to inspect the latest stored records:
 
-- ##### Terminal de MLflow / Docker: 
+```bash
+python check_db.py
+```
+3. Access MLflow:  
 
-    - docker-compose down
+Open http://localhost:5000 in your browser to view the metrics and experiment dashboard.
+
+### Roadmap / Future Improvements
+- Scalability: Migrate from SQLite to PostgreSQL for multi‑user support and distributed environments.
+
+- ML Models: Replace the heuristic logic with advanced predictive models (Prophet/XGBoost) served through MLflow.
+
+- Visualization: Integrate Grafana for real‑time business and infrastructure dashboards.
+
+### Recommended Shutdown Order:
+Producer terminal: Ctrl + C.
+(Stop the data faucet first.)
+
+Consumer terminal: Ctrl + C.
+(Allow it to process remaining messages and close the connection.)
+
+MLflow / Docker terminal:
+- docker-compose down
+
